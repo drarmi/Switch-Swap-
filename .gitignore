@@ -1,0 +1,41 @@
+# Core WordPress files
+/wp-admin/
+/wp-includes/
+/index.php
+/license.txt
+/readme.html
+/wp-*.php
+/xmlrpc.php
+
+# Configuration files
+wp-config.php
+/.htaccess
+
+# WordPress content folder
+/wp-content/*
+
+# Allow themes and plugins in wp-content
+!/wp-content/themes/
+!/wp-content/plugins/
+
+# Exclude specific theme twentytwentyfour
+/wp-content/themes/twentytwentyfour/
+
+# Ignore node_modules inside themes and plugins
+wp-content/themes/*/node_modules/
+wp-content/plugins/*/node_modules/
+
+# Cache, logs, and backup files
+*.log
+*.cache
+*.bak
+*.zip
+*.tar.gz
+
+# IDE and system files
+**/.idea/
+.DS_Store
+Thumbs.db
+
+# Composer and npm folders
+**/vendor/

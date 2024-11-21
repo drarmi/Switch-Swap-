@@ -9,9 +9,11 @@
 namespace Omnis\src\inc\classes\setup;
 
 use Omnis\src\inc\classes\helpers\Install_Required_Plugins;
+use Omnis\src\inc\classes\auth\Auth;
 use Omnis\src\inc\classes\pages\Home_Page;
-use Omnis\src\inc\classes\registration\User_Registration;
-use Omnis\src\inc\classes\user\User;
+//use Omnis\src\inc\classes\registration\User_Registration;
+//use Omnis\src\inc\classes\user\User;
+
 // Импортируем глобальные функции WordPress без указания собственного пространства имён
 use function register_nav_menus;
 use function esc_html__;
@@ -115,8 +117,10 @@ class Omnis_Theme {
     public static function bootstrap(): void {
         //Install_Required_Plugins::get_instance();
         Home_Page::get_instance();
-        User_Registration::get_instance();
-        User::get_instance();
+        //User_Registration::get_instance();
+        //User::get_instance();
+        Auth::get_instance();
+
     }
 
     /**

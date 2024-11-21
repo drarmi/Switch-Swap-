@@ -4,8 +4,8 @@ Template: storefront
 Author: omnis
 Description: Child theme for Storefront
 Version: 1.0.0
-Text Domain: storefront-child
+Text Domain: swap
 */
 
-/* Импортируем стили родительской темы */
-@import url("../storefront/style.css");
+
+

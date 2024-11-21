@@ -1,10 +1,11 @@
 <?php
-// Подключаем стили родительской темы
+
 function storefront_child_enqueue_styles() {
-    wp_enqueue_style('storefront-style', get_template_directory_uri() . '/style.css');
-    wp_enqueue_style('storefront-child-style', get_stylesheet_uri(), array('storefront-style'));
+	wp_enqueue_style( 'storefront-style-parent', get_template_directory_uri() . '/style.css' );
+    wp_enqueue_style( 'storefront-child-style', get_stylesheet_uri());
 }
-add_action('wp_enqueue_scripts', 'storefront_child_enqueue_styles');
+add_action( 'wp_enqueue_scripts', 'storefront_child_enqueue_styles', 15 );
+
 
 
 

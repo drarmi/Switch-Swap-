@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Autoloader Class File
  *
@@ -22,7 +23,8 @@ use function wp_die;
  *
  * @package    Omnis Base
  */
-class Autoloader {
+class Autoloader
+{
 
 
     /**
@@ -32,8 +34,9 @@ class Autoloader {
      *
      * @access public
      */
-    public function __construct() {
-        spl_autoload_register( array( $this, 'autoload' ) );
+    public function __construct()
+    {
+        spl_autoload_register(array($this, 'autoload'));
     }
 
     /**
@@ -41,26 +44,27 @@ class Autoloader {
      *
      * @param string $class_name The name of class that passed throw spl_auto_register.
      */
-    public function autoload( $class_name ) {
+    public function autoload($class_name)
+    {
 
         // If the specified $class_name does not include our namespace, duck out.
-        if ( false === strpos( $class_name, 'Omnis' ) ) {
+        if (false === strpos($class_name, 'Omnis')) {
             return;
         }
 
         // Split the class name into an array to read the namespace and class.
-        $file_parts = explode( '\\', $class_name );
+        $file_parts = explode('\\', $class_name);
 
         // Do a reverse loop through $file_parts to build the path to the file.
         $namespace = '';
         $file_name = '';
-        for ( $i = count( $file_parts ) - 1; $i > 0; $i-- ) {
+        for ($i = count($file_parts) - 1; $i > 0; $i--) {
             // Read the current component of the file part.
-            $current = strtolower( $file_parts[ $i ] );
-            $current = str_ireplace( '_', '-', $current );
+            $current = strtolower($file_parts[$i]);
+            $current = str_ireplace('_', '-', $current);
 
             // If we're at the first entry, then we're at the filename.
-            if ( count( $file_parts ) - 1 === $i ) {
+            if (count($file_parts) - 1 === $i) {
 
                 $file_name = "class-$current.php";
 
@@ -69,17 +73,17 @@ class Autoloader {
                  * Otherwise, just set the $file_name equal to that of the class
                  * filename structure.
                  */
-                if ( strpos( strtolower( $file_parts[ count( $file_parts ) - 1 ] ), 'interface' ) ) {
+                if (strpos(strtolower($file_parts[count($file_parts) - 1]), 'interface')) {
 
                     // Grab the name of the interface from its qualified name.
-                    $interface_name = explode( '_', $file_parts[ count( $file_parts ) - 1 ] );
+                    $interface_name = explode('_', $file_parts[count($file_parts) - 1]);
                     $interface_name = $interface_name[0];
 
                     $file_name = "interface-$interface_name.php";
-                } else if ( strpos( strtolower( $file_parts[ count( $file_parts ) - 1 ] ), 'traits' ) ) {
+                } else if (strpos(strtolower($file_parts[count($file_parts) - 1]), 'traits')) {
 
                     // Grab the name of the traits from its qualified name.
-                    $traits_name = explode( '_', $file_parts[ count( $file_parts ) - 1 ] );
+                    $traits_name = explode('_', $file_parts[count($file_parts) - 1]);
                     $traits_name = $traits_name[0];
 
                     $file_name = "traits-$traits_name.php";
@@ -92,15 +96,15 @@ class Autoloader {
         }
 
         // Now build a path to the file using mapping to the file location.
-        $file_path = trailingslashit( get_theme_file_path() . $namespace );
+        $file_path = trailingslashit(get_theme_file_path() . $namespace);
         $file_path .= $file_name;
 
         // If the file exists in the specified path, then include it.
-        if ( file_exists( $file_path ) ) {
+        if (file_exists($file_path)) {
             include_once $file_path;
         } else {
             wp_die(
-                esc_html( "The file attempting to be loaded at $file_path does not exist." )
+                esc_html("The file attempting to be loaded at $file_path does not exist.")
             );
         }
     }

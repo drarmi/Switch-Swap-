@@ -12,8 +12,7 @@
             <?php wp_nonce_field('lost_password', 'custom-lost-password-nonce'); ?>
 
             <div class="form-row">
-                <button type="submit" class="button-grey" name="lost-password"
-                    value="<?php esc_attr_e('אפס סיסמה', 'omnis_base'); ?>">
+                <button type="submit" class="button-grey" name="lost-password">
                     <?php esc_html_e('אפס סיסמה', 'your-text-domain'); ?>
                 </button>
             </div>

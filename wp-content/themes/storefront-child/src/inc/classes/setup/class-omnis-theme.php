@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Omnis Theme Setup
  *
@@ -10,6 +11,7 @@ namespace Omnis\src\inc\classes\setup;
 
 use Omnis\src\inc\classes\helpers\Install_Required_Plugins;
 use Omnis\src\inc\classes\auth\Auth;
+use Omnis\src\inc\classes\auth\Password_Control;
 use Omnis\src\inc\classes\pages\Home_Page;
 //use Omnis\src\inc\classes\registration\User_Registration;
 //use Omnis\src\inc\classes\user\User;
@@ -39,7 +41,8 @@ use function wp_localize_script;
  *  - Registering navigation menus
  *  - Setting up theme support features
  */
-class Omnis_Theme {
+class Omnis_Theme
+{
 
     /**
      * Holds the singleton instance of this class.
@@ -51,28 +54,29 @@ class Omnis_Theme {
     /**
      * Constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
         // Bootstrap required components.
-        $this->add_action( 'init', array( $this, 'bootstrap' ) );
+        $this->add_action('init', array($this, 'bootstrap'));
         // Enqueue scripts and styles.
-        $this->add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-        $this->add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_style' ), 100 );
+        $this->add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
+        $this->add_action('wp_enqueue_scripts', array($this, 'enqueue_style'), 100);
         // Add theme options using Advanced Custom Fields.
-        $this->add_action( 'init', array( $this, 'advanced_custom_fields_options' ) );
+        $this->add_action('init', array($this, 'advanced_custom_fields_options'));
         // Set up language support.
-        $this->add_action( 'init', array( $this, 'languages' ) );
+        $this->add_action('init', array($this, 'languages'));
         // Register custom post types.
-        $this->add_action( 'init', array( $this, 'post_type' ) );
+        $this->add_action('init', array($this, 'post_type'));
         // Register taxonomies.
-        $this->add_action( 'init', array( $this, 'taxonomy' ) );
+        $this->add_action('init', array($this, 'taxonomy'));
         // Register navigation menus.
-        $this->add_action( 'after_setup_theme', array( $this, 'register_menus' ) );
+        $this->add_action('after_setup_theme', array($this, 'register_menus'));
         // Set up theme support features.
-        $this->add_action( 'after_setup_theme', array( $this, 'theme_setup' ) );
+        $this->add_action('after_setup_theme', array($this, 'theme_setup'));
         // Deregister unnecessary styles.
-        $this->add_action( 'wp_enqueue_scripts', array( $this, 'dequeue_style' ) );
+        $this->add_action('wp_enqueue_scripts', array($this, 'dequeue_style'));
         // Localize scripts for AJAX functionality.
-        $this->add_action( 'wp_enqueue_scripts', array( $this, 'localize_script' ) );
+        $this->add_action('wp_enqueue_scripts', array($this, 'localize_script'));
     }
 
     /**
@@ -89,8 +93,9 @@ class Omnis_Theme {
      *
      * @return void
      */
-    public function add_action( string $hook, callable $callback, int $priority = null, int $accepted_args = null ): void {
-        add_action( $hook, $callback, $priority, $accepted_args );
+    public function add_action(string $hook, callable $callback, int $priority = null, int $accepted_args = null): void
+    {
+        add_action($hook, $callback, $priority, $accepted_args);
     }
 
     /**
@@ -107,27 +112,30 @@ class Omnis_Theme {
      *
      * @return void
      */
-    public function add_filter( string $hook, callable $callback, int $priority = null, int $accepted_args = null ): void {
-        add_filter( $hook, $callback, $priority, $accepted_args );
+    public function add_filter(string $hook, callable $callback, int $priority = null, int $accepted_args = null): void
+    {
+        add_filter($hook, $callback, $priority, $accepted_args);
     }
 
     /**
      * Bootstrap required components
      */
-    public static function bootstrap(): void {
+    public static function bootstrap(): void
+    {
         //Install_Required_Plugins::get_instance();
         Home_Page::get_instance();
         //User_Registration::get_instance();
         //User::get_instance();
         Auth::get_instance();
-
+        Password_Control::get_instance();
     }
 
     /**
      * Get an instance of the class
      */
-    public static function get_instance(): Omnis_Theme {
-        if ( ! isset( self::$instance ) ) {
+    public static function get_instance(): Omnis_Theme
+    {
+        if (! isset(self::$instance)) {
             self::$instance = new self();
         }
         return self::$instance;
@@ -136,15 +144,17 @@ class Omnis_Theme {
     /**
      * Dequeue hooks
      */
-    public function dequeue_hooks(): void {
-        add_filter( 'big_image_size_threshold', '__return_false' );
+    public function dequeue_hooks(): void
+    {
+        add_filter('big_image_size_threshold', '__return_false');
     }
 
     /**
      * Add options using Advanced Custom Fields
      */
-    public function advanced_custom_fields_options(): void {
-        if ( function_exists( 'acf_add_options_page' ) ) {
+    public function advanced_custom_fields_options(): void
+    {
+        if (function_exists('acf_add_options_page')) {
             acf_add_options_page(
                 array(
                     'page_title' => 'Theme Options',
@@ -193,39 +203,43 @@ class Omnis_Theme {
     /**
      * Set up language support.
      */
-    public function languages(): void {
-        load_theme_textdomain( 'omnis_base', get_template_directory() . '/languages' );
+    public function languages(): void
+    {
+        load_theme_textdomain('omnis_base', get_template_directory() . '/languages');
     }
 
     /**
      * Register custom post types.
      */
-    public function post_type(): void {
+    public function post_type(): void
+    {
         // Implement custom post type registration here.
     }
 
     /**
      * Register taxonomies.
      */
-    public function taxonomy(): void {
+    public function taxonomy(): void
+    {
         // Implement taxonomy registration here.
     }
 
     /**
      * Localize scripts for AJAX functionality.
      */
-    public function localize_script(): void {
+    public function localize_script(): void
+    {
         wp_localize_script(
             'frontend-js',
             'omnis_ajax_object',
             array(
-                'ajaxurl'        => admin_url( 'admin-ajax.php' ),
+                'ajaxurl'        => admin_url('admin-ajax.php'),
                 'home_url'       => get_home_url(),
                 'current_ID'     => get_the_ID(),
                 'current_url'    => get_permalink(),
-                'current_user_id'=> get_current_user_id(),
+                'current_user_id' => get_current_user_id(),
                 'nonce'          => wp_create_nonce('registration_nonce'),
-                'current_page'   => get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1,
+                'current_page'   => get_query_var('paged') ? get_query_var('paged') : 1,
             )
         );
     }
@@ -233,21 +247,23 @@ class Omnis_Theme {
     /**
      * Deregister unnecessary styles.
      */
-    public function dequeue_style(): void {
-        wp_dequeue_style( 'wp-block-library' );
-        wp_dequeue_style( 'toc-screen' );
-        wp_dequeue_style( 'wpm-main' );
-        wp_dequeue_style( 'global-styles-inline' );
+    public function dequeue_style(): void
+    {
+        wp_dequeue_style('wp-block-library');
+        wp_dequeue_style('toc-screen');
+        wp_dequeue_style('wpm-main');
+        wp_dequeue_style('global-styles-inline');
     }
 
     /**
      * Register navigation menus.
      */
-    public function register_menus(): void {
+    public function register_menus(): void
+    {
         register_nav_menus(
             array(
-                'header-menu' => esc_html__( 'Header Menu', 'text_domain' ),
-                'footer-menu' => esc_html__( 'Footer Menu', 'text_domain' ),
+                'header-menu' => esc_html__('Header Menu', 'text_domain'),
+                'footer-menu' => esc_html__('Footer Menu', 'text_domain'),
             )
         );
     }
@@ -255,39 +271,43 @@ class Omnis_Theme {
     /**
      * Set up theme support features.
      */
-    public function theme_setup(): void {
-        add_theme_support( 'title-tag' );
-        add_theme_support( 'post-thumbnails' );
-        add_theme_support( 'align-wide' );
-        add_theme_support( 'responsive-embeds' );
-        add_theme_support( 'custom-logo' );
+    public function theme_setup(): void
+    {
+        add_theme_support('title-tag');
+        add_theme_support('post-thumbnails');
+        add_theme_support('align-wide');
+        add_theme_support('responsive-embeds');
+        add_theme_support('custom-logo');
     }
 
     /**
      * Enqueue styles.
      */
-    public function enqueue_style(): void {
+    public function enqueue_style(): void
+    {
         // Enqueue vendor CSS.
-        wp_enqueue_style( 'vendor-css', get_stylesheet_directory_uri() . '/assets/dist/vendor/vendor.css', array(), THEME_VERSION );
+        wp_enqueue_style('vendor-css', get_stylesheet_directory_uri() . '/assets/dist/vendor/vendor.css', array(), THEME_VERSION);
         // Enqueue main CSS.
-        wp_enqueue_style( 'main-css', get_stylesheet_directory_uri() . '/assets/dist/css/main.css', array(), THEME_VERSION );
+        wp_enqueue_style('main-css', get_stylesheet_directory_uri() . '/assets/dist/css/main.css', array(), THEME_VERSION);
         // Deregister and dequeue unnecessary styles.
-        wp_deregister_style( 'wp-block-library-rtl' );
-        wp_dequeue_style( 'wp-block-library' );
-        wp_dequeue_style( 'wp-block-library-theme' );
-        wp_dequeue_style( 'wc-blocks-style' );
+        wp_deregister_style('wp-block-library-rtl');
+        wp_dequeue_style('wp-block-library');
+        wp_dequeue_style('wp-block-library-theme');
+        wp_dequeue_style('wc-blocks-style');
     }
 
     /**
      * Enqueue scripts
      */
-    public function enqueue_scripts(): void {
+    public function enqueue_scripts(): void
+    {
         // Enqueue vendor JS.
-        wp_enqueue_script( 'vendor-js', get_stylesheet_directory_uri() . '/assets/dist/vendor/vendor.js', array(), THEME_VERSION, true );
+        wp_enqueue_script('vendor-js', get_stylesheet_directory_uri() . '/assets/dist/vendor/vendor.js', array(), THEME_VERSION, true);
         // Enqueue main JS.
-        wp_enqueue_script( 'main-js', get_stylesheet_directory_uri() . '/assets/dist/js/main.js', array( 'jquery' ), THEME_VERSION, true );
+        wp_enqueue_script('main-js', get_stylesheet_directory_uri() . '/assets/dist/js/main.js', array('jquery'), THEME_VERSION, true);
+        wp_localize_script('main-js', 'ajaxObject', ['ajaxUrl' => admin_url('admin-ajax.php')]);
 
-        wp_enqueue_script( 'frontend-js', get_stylesheet_directory_uri() . '/assets/dist/js/frontend.js', array( 'jquery' ), THEME_VERSION, true );
+        wp_enqueue_script('frontend-js', get_stylesheet_directory_uri() . '/assets/dist/js/frontend.js', array('jquery'), THEME_VERSION, true);
     }
 }
 

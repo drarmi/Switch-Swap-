@@ -1,3 +1,12 @@
+import axios from 'axios';
+import $ from '../../../node_modules/jquery';
+
+interface AjaxObject {
+    ajaxUrl: string;
+}
+
+declare const ajaxObject: AjaxObject | undefined;
+
 class LostPassword {
     private static instance: LostPassword;
 
@@ -20,7 +29,7 @@ class LostPassword {
         this.showPassBTN = this.pageRestorePass ? this.pageRestorePass.querySelectorAll('svg.hide') : null;
 
         if (this.submitBTNlost) {
-            this.submitBTNlost.addEventListener('click', this.handleSubmit);
+            this.submitBTNlost.addEventListener('click', this.handleSubmit.bind(this));
         }
 
         if (this.inputRestorePass) {
@@ -45,7 +54,45 @@ class LostPassword {
 
     private handleSubmit(event: Event): void {
         event.preventDefault();
-        console.log('Lost password submit button clicked!');
+
+        const form = (event.target as HTMLElement).closest('form') as HTMLFormElement;
+        if (!form) return;
+
+        const formData = new FormData(form);
+        formData.append('action', 'reset_password');
+
+        const lostPasswordForm = document.querySelector('.lost-pasword-form') as HTMLElement | null;
+        const lostPasswordSend = document.querySelector('.lost-pasword-send') as HTMLElement | null;
+        const submitBTN = form.querySelector("button[type='submit']") as HTMLButtonElement;
+
+        // Disable the submit button to prevent multiple submissions
+        if (submitBTN) submitBTN.disabled = true;
+
+        if (ajaxObject?.ajaxUrl) {
+            axios
+                .post(ajaxObject.ajaxUrl, formData)
+                .then((response) => {
+                    if (response.data.success) {
+                        // Ensure elements exist before trying to modify their display
+                        if (lostPasswordForm && lostPasswordSend) {
+                            lostPasswordForm.style.display = 'none';
+                            lostPasswordSend.style.display = 'block';
+                        }
+                    } else {
+                        alert(response.data.message || 'An error occurred.');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error resetting password:', error);
+                    alert('An error occurred while processing your request.');
+                })
+                .finally(() => {
+                    if (submitBTN) submitBTN.disabled = false;
+                });
+        } else {
+            console.error('ajaxUrl is undefined or invalid.');
+            alert('An error occurred: Unable to send the request.');
+        }
     }
 
     private controlShowPassBTN(event: Event): void {
@@ -83,10 +130,10 @@ class LostPassword {
                     if (span) span.style.display = 'none';
 
                     svgs.forEach((svg) => {
-                        svg.style.display = 'inline'; // Or "block", depending on your layout
+                        svg.style.display = 'inline';
                     });
                 } else {
-                    if (span) span.style.display = 'inline'; // Or "block"
+                    if (span) span.style.display = 'inline';
 
                     svgs.forEach((svg) => {
                         svg.style.display = 'none';
@@ -97,7 +144,7 @@ class LostPassword {
     }
 }
 
-// Initialize the LostPassword functionality
+
 document.addEventListener('DOMContentLoaded', () => {
     LostPassword.getInstance();
 });

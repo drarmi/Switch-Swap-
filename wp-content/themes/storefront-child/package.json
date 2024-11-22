@@ -132,6 +132,8 @@
   "dependencies": {
     "@fancyapps/fancybox": "^3.5.7",
     "aos": "^2.3.4",
+    "axios": "^1.7.7",
+    "jquery": "^3.7.1",
     "smoothscroll-polyfill": "^0.4.4",
     "swiper": "^8.4.7",
     "universal-cookie": "^4.0.4"

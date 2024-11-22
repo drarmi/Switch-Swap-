@@ -84,7 +84,7 @@ const projectFiles = {
 
     // BrowserSync settings
     browserSync: {
-        enable: true,
+        enable: false,
         host: 'localhost',
         port: 3000,
         mode: 'server',

@@ -101,7 +101,9 @@ class Autoloader
 
         // If the file exists in the specified path, then include it.
         if (file_exists($file_path)) {
-            include_once $file_path;
+            if ($file_name) {
+                include_once $file_path;
+            }
         } else {
             wp_die(
                 esc_html("The file attempting to be loaded at $file_path does not exist.")

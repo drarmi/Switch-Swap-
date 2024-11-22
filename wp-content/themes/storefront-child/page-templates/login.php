@@ -26,7 +26,7 @@ get_header('login');
             <input class="woocommerce-Input woocommerce-Input--text input-text" type="password" placeholder="<?php esc_html_e('סיסמה', 'onmis_base') ?>" name="password" id="password" autocomplete="current-password" required aria-required="true" />
         </p>
         <p class="lost-password">
-            <a href="<?php echo esc_url( wp_lostpassword_url() ); ?>">לחץ/י כאן </a> שכחת סיסמה?
+            <a href="<?php echo esc_url( home_url(). '/lost-password' ); ?>">לחץ/י כאן </a> שכחת סיסמה?
         </p>
 
         <?php do_action( 'woocommerce_login_form' ); ?>
